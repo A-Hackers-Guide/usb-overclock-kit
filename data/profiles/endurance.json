@@ -1,0 +1,42 @@
+{
+  "name": "endurance",
+  "description": "Maximum lifetime profile. Huge over-provisioning, static pSLC region, aggressive wear leveling, conservative NAND timing. For drives that need to live a long time under constant write load (e.g. a log/cache/scratch drive, a long-running swap device, a 24/7 recorder). Trades substantial capacity for 3-5× factory lifetime.",
+  "workload": {
+    "io_size_bytes": 4096,
+    "io_pattern": "sequential_or_random_write_heavy",
+    "read_write_mix": "write_heavy",
+    "queue_depth_typical": 1,
+    "queue_depth_burst": 8,
+    "burstiness": "moderate",
+    "endurance_priority": "extreme",
+    "latency_sensitivity": "moderate",
+    "throughput_priority": "moderate"
+  },
+  "targets": {
+    "over_provisioning_percent": 40,
+    "pslc_cache_mode": "static_medium",
+    "pslc_cache_size_percent": 20,
+    "usb_mode": "superspeed_force",
+    "usb_lpm_enabled": true,
+    "gc_aggressiveness": "aggressive",
+    "write_buffer_mode": "adaptive",
+    "ecc_strength": "max_rated",
+    "nand_timing_grade": "rated_mid",
+    "thermal_throttle_c": 60
+  },
+  "capacity_impact": {
+    "advertised_gb": 64,
+    "estimated_usable_gb": 30,
+    "method": "usable ≈ advertised × (1 − OP/100) × (1 − pSLC/100). Big OP + static pSLC = big capacity haircut."
+  },
+  "host_recommendations": {
+    "partition_scheme": "GPT or ZFS pool",
+    "filesystem": "ext4 with low journaling, or no filesystem for raw log use",
+    "notes": [
+      "Expect ~3-5× the P/E cycle lifetime of a factory-tuned drive, due to the larger spare pool spreading wear evenly.",
+      "pSLC region (20%) is static, so always-fast writes go there and wear slower.",
+      "Thermal 60°C setpoint is cooler than default — NAND retention improves with lower junction temp.",
+      "This profile is overkill for 'occasional backup stick' use. It's for drives expected to see >100 TBW over their life."
+    ]
+  }
+}

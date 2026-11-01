@@ -1,0 +1,40 @@
+{
+  "name": "balanced",
+  "description": "A general-purpose profile — the drive the OEM should have shipped. Reasonable OP, modest pSLC, SuperSpeed forced, factory-safe thermal setpoint. Suitable as a daily-driver USB stick for mixed read/write.",
+  "workload": {
+    "io_size_bytes": 65536,
+    "io_pattern": "mixed",
+    "read_write_mix": "balanced",
+    "queue_depth_typical": 1,
+    "queue_depth_burst": 16,
+    "burstiness": "moderate",
+    "endurance_priority": "moderate",
+    "latency_sensitivity": "moderate",
+    "throughput_priority": "moderate"
+  },
+  "targets": {
+    "over_provisioning_percent": 15,
+    "pslc_cache_mode": "dynamic",
+    "pslc_cache_size_percent": 15,
+    "usb_mode": "superspeed_force",
+    "usb_lpm_enabled": true,
+    "gc_aggressiveness": "moderate",
+    "write_buffer_mode": "adaptive",
+    "ecc_strength": "max_rated",
+    "nand_timing_grade": "rated_max",
+    "thermal_throttle_c": 65
+  },
+  "capacity_impact": {
+    "advertised_gb": 64,
+    "estimated_usable_gb": 46,
+    "method": "usable ≈ advertised × (1 − OP/100) × (1 − pSLC/100). Modest OP + modest pSLC."
+  },
+  "host_recommendations": {
+    "partition_scheme": "GPT or MBR, filesystem of choice",
+    "filesystem": "exFAT (cross-platform) or ext4 (Linux-only, better TRIM)",
+    "notes": [
+      "Factory firmware on cheap drives often ships with 0-5% OP and no SuperSpeed force. This profile fixes both without exotic trade-offs.",
+      "Expect ~10-20% better sustained write than factory, same peak sequential, same capacity-ish."
+    ]
+  }
+}

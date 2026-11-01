@@ -1,0 +1,44 @@
+{
+  "name": "swap-aggressive",
+  "description": "Prioritize sustained random 4K perf and endurance for Linux swap. Trades capacity for performance and lifetime.",
+  "workload": {
+    "io_size_bytes": 4096,
+    "io_pattern": "random",
+    "read_write_mix": "mixed",
+    "queue_depth_typical": 1,
+    "queue_depth_burst": 32,
+    "burstiness": "high",
+    "endurance_priority": "high",
+    "latency_sensitivity": "extreme",
+    "throughput_priority": "low"
+  },
+  "targets": {
+    "over_provisioning_percent": 30,
+    "pslc_cache_mode": "static_large",
+    "pslc_cache_size_percent": 25,
+    "usb_mode": "superspeed_force",
+    "gc_aggressiveness": "aggressive",
+    "write_buffer_mode": "low_latency",
+    "ecc_strength": "max_rated",
+    "nand_timing_grade": "rated_max",
+    "thermal_throttle_c": 70
+  },
+  "capacity_impact": {
+    "advertised_gb": 64,
+    "estimated_usable_gb": 34,
+    "method": "usable ≈ advertised × (1 − OP/100) × (1 − pSLC/100), rounded down. Exact result depends on how the controller counts pSLC (some count against OP, some against user capacity)."
+  },
+  "host_recommendations": {
+    "partition_scheme": "GPT, single partition, type=Linux swap (GUID 0657FD6D-A4AB-43C4-84E5-0933C84B4F4F; sgdisk typecode 8200)",
+    "filesystem": null,
+    "swap_setup": "mkswap --label <label> <partition>",
+    "swapon_options": "--priority 100 --discard=once",
+    "notes": [
+      "No filesystem on the partition — swapon talks to raw blocks for latency.",
+      "macOS cannot redirect swap to external devices; this profile is Linux-only in practice.",
+      "Thermal: USB sticks regularly hit 70-85°C under sustained swap. Verify your enclosure allows airflow or use a metal-cased drive.",
+      "Endurance: ~2-5× factory lifetime at this OP level, but swap writes constantly — expect multi-month to multi-year lifespan depending on load.",
+      "Hibernation image goes to swap too; if you hibernate, back up anything sensitive before relying on this drive long-term."
+    ]
+  }
+}

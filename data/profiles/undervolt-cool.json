@@ -1,0 +1,44 @@
+{
+  "name": "undervolt-cool",
+  "description": "Low-power / cool-running profile. A USB flash controller does NOT expose a VID voltage offset like a CPU — this profile is the honest translation: lower NAND clock grade, aggressive link power management, modest OP, cool thermal setpoint. Trades peak throughput for lower average power and junction temperature.",
+  "workload": {
+    "io_size_bytes": 65536,
+    "io_pattern": "mixed",
+    "read_write_mix": "balanced",
+    "queue_depth_typical": 1,
+    "queue_depth_burst": 4,
+    "burstiness": "low",
+    "endurance_priority": "moderate",
+    "latency_sensitivity": "moderate",
+    "throughput_priority": "low",
+    "power_priority": "high",
+    "thermal_priority": "high"
+  },
+  "targets": {
+    "over_provisioning_percent": 15,
+    "pslc_cache_mode": "dynamic_small",
+    "pslc_cache_size_percent": 8,
+    "usb_mode": "allow_fallback",
+    "usb_lpm_enabled": true,
+    "gc_aggressiveness": "minimal_idle",
+    "write_buffer_mode": "coalesce_standard",
+    "ecc_strength": "rated_standard",
+    "nand_timing_grade": "rated_min_safe",
+    "thermal_throttle_c": 55
+  },
+  "capacity_impact": {
+    "advertised_gb": 64,
+    "estimated_usable_gb": 50,
+    "method": "usable ≈ advertised × (1 − OP/100) × (1 − pSLC/100). Small pSLC + modest OP keeps most of the capacity."
+  },
+  "host_recommendations": {
+    "partition_scheme": "whatever you want — this profile makes no partition demands",
+    "filesystem": "exFAT, ext4, APFS — your call",
+    "notes": [
+      "Run cooler = last longer. If this drive lives in a laptop case or inside a vehicle, this profile buys you thermal margin.",
+      "LPM (Link Power Management) must also be enabled on the host for the full idle-power gain. Linux: `/sys/bus/usb/devices/.../power/control = auto`. macOS: enabled by default. Windows: enable via power plan.",
+      "Expect ~20-30% lower peak throughput than factory. Random IO latency may be slightly worse too (NAND clocked lower).",
+      "Thermal setpoint 55°C is aggressive — most drives run above this when active. Expect visible throttling under load. That's the point."
+    ]
+  }
+}

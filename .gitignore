@@ -1,0 +1,10 @@
+*.img
+*.bin
+*.dmg
+reports/photos/
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.vscode/
+.idea/

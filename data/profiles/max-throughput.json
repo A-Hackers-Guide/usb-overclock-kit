@@ -1,0 +1,42 @@
+{
+  "name": "max-throughput",
+  "description": "Peak-numbers profile. Huge DYNAMIC pSLC cache so burst writes land in SLC mode, minimal OP so advertised capacity stays high, high NAND clock, generous thermal headroom. Makes the drive LOOK fast in short benchmarks and real-world short bursts, at the cost of ugly cliff behavior once the pSLC cache fills.",
+  "workload": {
+    "io_size_bytes": 1048576,
+    "io_pattern": "sequential",
+    "read_write_mix": "write_heavy",
+    "queue_depth_typical": 4,
+    "queue_depth_burst": 32,
+    "burstiness": "extreme",
+    "endurance_priority": "low",
+    "latency_sensitivity": "low",
+    "throughput_priority": "extreme"
+  },
+  "targets": {
+    "over_provisioning_percent": 7,
+    "pslc_cache_mode": "dynamic_large",
+    "pslc_cache_size_percent": 40,
+    "usb_mode": "superspeed_force",
+    "usb_lpm_enabled": false,
+    "gc_aggressiveness": "idle_only",
+    "write_buffer_mode": "high_throughput_coalesce",
+    "ecc_strength": "rated_standard",
+    "nand_timing_grade": "rated_max",
+    "thermal_throttle_c": 75
+  },
+  "capacity_impact": {
+    "advertised_gb": 64,
+    "estimated_usable_gb": 59,
+    "method": "usable ≈ advertised × (1 − OP/100). Dynamic pSLC floats across free blocks and doesn't permanently reduce capacity."
+  },
+  "host_recommendations": {
+    "partition_scheme": "GPT, exFAT typically",
+    "filesystem": "exFAT or NTFS for cross-platform",
+    "notes": [
+      "WARNING: this profile optimizes for the first ~25 GB of a sustained write. After the dynamic pSLC cache fills, the drive drops to native TLC speed (sometimes 20-40 MB/s). The infamous 'SLC cliff'.",
+      "Great for USB stick that mostly handles single-file-at-a-time copies under 20 GB (installer media, video exports, document bundles).",
+      "Bad for long sustained copies (filling the drive, video surveillance capture). Use endurance or swap-aggressive for those.",
+      "LPM disabled on purpose — any wake latency costs peak numbers in benchmarks."
+    ]
+  }
+}

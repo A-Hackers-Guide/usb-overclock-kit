@@ -1,0 +1,111 @@
+{
+  "_comment": "USB flash controller VID:PID database. Note: a VID:PID identifies the USB bridge mode the controller is currently in, not the controller SKU itself. The same SoC can expose many VID:PIDs depending on how it was mass-produced. Use ChipGenius or physical chip markings for authoritative ID. PRs welcome.",
+  "vendors": {
+    "058f": "Alcor Micro",
+    "090c": "Silicon Motion / SMI",
+    "0781": "SanDisk (bridge varies)",
+    "0951": "Kingston (Phison in most retail SKUs)",
+    "13fe": "Kingston / Phison",
+    "154b": "PNY (Phison in most retail SKUs)",
+    "1908": "Phison",
+    "1b1c": "Corsair (controller varies)",
+    "1e4e": "Chipsbank / Cypress",
+    "0bda": "Realtek",
+    "14cd": "Super Top (SMI SM32xx common)",
+    "174c": "ASMedia (bridge, usually SATA)",
+    "152d": "JMicron (bridge, usually SATA)",
+    "346d": "Unknown / no-name OEM — common on cheap Chinese sticks"
+  },
+  "entries": {
+    "058f:6387": {
+      "family": "Alcor Micro AU63xx / AU6981 era",
+      "tool": "AlcorMP (Chinese; usbdev.ru)",
+      "notes": "Common bridge VID:PID for Alcor controllers in boot mode. Often appears when firmware is corrupt."
+    },
+    "058f:9380": {
+      "family": "Alcor Micro AU6998",
+      "tool": "AlcorMP (newer builds)",
+      "notes": "USB 3.0 Alcor controller common in no-name retail sticks."
+    },
+    "090c:1000": {
+      "family": "SMI SM32xx in boot mode",
+      "tool": "SMI MPTool",
+      "notes": "Fallback VID:PID when SMI firmware is corrupt or in mass-production mode. Plug in and SMI MPTool should auto-detect."
+    },
+    "090c:3350": {
+      "family": "SMI SM3350",
+      "tool": "SMI MPTool v2.5.x",
+      "notes": "USB 3.2 Gen2 SMI; found in newer high-end retail drives."
+    },
+    "0781:5591": {
+      "family": "SanDisk Cruzer Blade / Fit (Phison or in-house ASIC depending on year)",
+      "tool": "Phison MPALL if Phison; SanDisk does not publish their own tool",
+      "notes": "SanDisk retail bridge; actual controller varies — open the drive to confirm."
+    },
+    "0781:5583": {
+      "family": "SanDisk Ultra Fit (various)",
+      "tool": "Depends on controller — open and read markings",
+      "notes": ""
+    },
+    "0951:1666": {
+      "family": "Kingston DataTraveler G3 — typically Phison PS2251-13 or PS2251-50",
+      "tool": "Phison MPALL (match IC version from GetInfo)",
+      "notes": "Very common controller in Kingston DT series. Open to confirm exact PS2251 revision."
+    },
+    "0951:1665": {
+      "family": "Kingston DataTraveler (earlier Phison PS2251-11)",
+      "tool": "Phison MPALL older versions",
+      "notes": ""
+    },
+    "13fe:4300": {
+      "family": "Kingston / Phison composite",
+      "tool": "Phison MPALL",
+      "notes": "Common on cheap OEM Kingston-branded sticks sold in packs."
+    },
+    "13fe:5500": {
+      "family": "Phison PS2309 Boot ROM",
+      "tool": "Phison MPALL / UPTool (match IC version from GetInfo output)",
+      "notes": "USB 3.x Phison controller in mass-production / boot ROM mode. Already in a flashable state — MPALL will see it without TP pin shorting. Confirmed in-field 2026-11-01 via ioreg (USB Product Name='2309 Boot ROM', USB Vendor Name='Phison'). Common on Kingston DataTraveler Exodia and various rebrands."
+    },
+    "154b:005b": {
+      "family": "PNY Attaché — Phison PS2251-xx",
+      "tool": "Phison MPALL",
+      "notes": ""
+    },
+    "154b:00af": {
+      "family": "PNY — Phison PS2251-13 class",
+      "tool": "Phison MPALL",
+      "notes": ""
+    },
+    "1908:0226": {
+      "family": "Phison PS2251-07 (USB 2.0)",
+      "tool": "Phison MPALL v3.x",
+      "notes": "USB 2.0 era; legacy."
+    },
+    "1908:0320": {
+      "family": "Phison PS2251-50 or related USB 3.0 SKU",
+      "tool": "Phison MPALL v5.x",
+      "notes": ""
+    },
+    "1e4e:0801": {
+      "family": "Chipsbank CBM209x or Realtek RTS53xx",
+      "tool": "UMPTool or Realtek USB MP Tool",
+      "notes": "Ambiguous without physical confirmation."
+    },
+    "0bda:0180": {
+      "family": "Realtek RTS5171 (card reader; sometimes seen on flash sticks)",
+      "tool": "Realtek USB MP Tool",
+      "notes": ""
+    },
+    "14cd:1212": {
+      "family": "SMI SM32xx on Super Top-labeled drives",
+      "tool": "SMI MPTool",
+      "notes": ""
+    },
+    "346d:5678": {
+      "family": "Unknown no-name OEM — physical inspection required",
+      "tool": "ChipGenius on Windows first (to identify), then matching MPTool",
+      "notes": "Generic 'USB / Disk 20' USB descriptor is a lazy-OEM fingerprint, extremely common on cheap Chinese sticks. bcdUSB=2.1 compliant but Device Speed=HighSpeed only, i.e. USB 2.0 hardware. Open the drive to read chip markings (see docs/01) BEFORE any firmware operation; the controller family cannot be inferred from the USB descriptor alone. Observed in-field 2026-11-01 as two separate drives sharing this VID:PID (serials FC1659EC33C17 and FC0154F669999)."
+    }
+  }
+}
