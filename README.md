@@ -1,5 +1,8 @@
 # usb-overclock-kit
 
+[![Download USB-Overclock-Kit](https://img.shields.io/sourceforge/dt/usb-oc-kit.svg?label=SourceForge%20downloads)](https://sourceforge.net/projects/usb-oc-kit/files/latest/download) [![Download USB-Overclock-Kit](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/usb-oc-kit/files/latest/download)
+
+
 Cross-platform recon, backup, benchmarking, and tuning for commodity USB
 flash drives — with heavy documentation so a stranger can walk in cold
 and understand what's actually happening inside the plastic stick.
